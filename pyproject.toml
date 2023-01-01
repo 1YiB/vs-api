@@ -1,0 +1,27 @@
+[project]
+
+name = "vs_api"
+description = "unofficial api for open-vsx & vs-marketplace"
+version = "0.0.1"
+
+authors = [{ name = "1YiB", email = "1YiB@proton.me" }]
+license = { file = "LICENSE" }
+readme = "README.md"
+
+dependencies = ["httpx", "simplejson", "ndicts", "jsonobject"]
+requires-python = "^3.10"
+
+[project.optional-dependencies]
+
+dev = ["black", "isort", "pylint"]
+
+[build-system]
+
+requires = ["setuptools ~= 58.0", "cython ~= 0.29.0"]
+build-backend = "setuptools.build_meta:__legacy__"
+
+[project.urls]
+
+"homepage" = "https://github.com/1YiB/vs-api"
+"bugs" = "https://github.com/1YiB/vs-api/issues"
+"source" = "https://github.com/1YiB/vs-api/"

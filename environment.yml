@@ -1,0 +1,19 @@
+name: vs-api
+
+channels:
+  - defaults
+
+dependencies:
+
+  # optional
+  - black
+  - isort
+  - pylint
+
+  # required
+  - pip
+  - pip:
+    - httpx
+    - simplejson
+    - ndicts
+    - jsonobject
