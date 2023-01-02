@@ -12,6 +12,6 @@ def reviews(uid:str,client:httpx.Client) -> tuple[bytes, int]:
         tuple[bytes, int]: tuple('api response','api status code')
     """
 
-    endpoint = f"/{uid}/reviews"
+    endpoint = f"{uid}/reviews"
     r = client.get(url=endpoint)
     return (r.content,r.status_code)

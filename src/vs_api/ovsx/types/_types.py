@@ -2,7 +2,7 @@ from typing import Literal
 
 class uid(str):
     def url(self):
-        return f"/{self.replace('.','/')}"
+        return f"{self.replace('.','/')}"
 
 category = Literal[
     "",

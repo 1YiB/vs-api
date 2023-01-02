@@ -9,7 +9,7 @@ from jsonobject import (
 )
 
 
-class search_files(JsonObject):
+class files(JsonObject):
 
     download = StringProperty()
     manifest = StringProperty()
@@ -26,7 +26,7 @@ class extension(JsonObject):
     version = StringProperty()
     avgRating = DecimalProperty()
     downloadCount = IntegerProperty
-    files = ObjectProperty(search_files)
+    files = ObjectProperty(files)
 
 
 class search(JsonObject):

@@ -41,19 +41,19 @@ class OpenVSX:
             case _:
                 nd = NestedDict(json.loads(content))
 
-                res = models.info(
-                    name=models.name(
+                res = models.info.info(
+                    name=models.info.name(
                         trueName=nd.get(("name"),None),
                         displayName=nd.get(("displayName"),None),
                     ),
-                    publisher=models.publisher(
-                        org=models.org(
+                    publisher=models.info.publisher(
+                        org=models.info.org(
                             name=nd.get(("namespace"),None),
                             access=nd.get(("namespaceAccess"),None),
                             verified=nd.get(("verified"),None),
                             unrelated=nd.get(("unrelatedPublisher"),None),
                         ),
-                        publishedBy=models.publishedBy(
+                        publishedBy=models.info.publishedBy(
                             loginName=nd.get(("publishedBy", "loginName"),None),
                             fullName=nd.get(("publishedBy", "fullName"),None),
                             avatar=nd.get(("publishedBy", "avatarUrl"),None),
@@ -61,8 +61,8 @@ class OpenVSX:
                             provider=nd.get(("publishedBy", "provider"),None),
                         ),
                     ),
-                    metadata=models.metadata(
-                        general=models.general(
+                    metadata=models.info.metadata(
+                        general=models.info.general(
                             desc=nd.get(("description"),None),
                             version=nd.get(("version"),None),
                             platform=nd.get(("targetPlatform"),None),
@@ -70,32 +70,32 @@ class OpenVSX:
                             preview=nd.get(("preview"),None),
                             preRelease=nd.get(("preRelease"),None),
                         ),
-                        classifcation=models.classifcation(
+                        classifcation=models.info.classifcation(
                             categories=nd.get(("categories"),None),
                             kind=nd.get(("extensionKind"),None),
                             tags=nd.get(("tags"),None),
                         ),
-                        requirments=models.requirments(
+                        requirments=models.info.requirments(
                             engine=nd.get(("engines", "vscode"),None),
                             deps=nd.get(("dependencies"),None),
                             bundled=nd.get(("bundledExtensions"),None),
                         ),
-                        rating=models.rating(
+                        rating=models.info.rating(
                             reviewCount=nd.get(("reviewCount"),None),
                             avg=nd.get(("averageRating"),None),
                         ),
-                        downloads=models.downloads(
+                        downloads=models.info.downloads(
                             count=nd.get(("downloadCount"),None),
                         ),
                     ),
-                    files=models.files(
+                    files=models.info.files(
                         download=nd.get(("files", "download"),None),
                         manifest=nd.get(("files", "manifest"),None),
                         readme=nd.get(("files", "readme"),None),
                         changelog=nd.get(("files", "changelog"),None),
                         icon=nd.get(("files", "icon"),None),
                     ),
-                    urls=models.urls(
+                    urls=models.info.urls(
                         homepage=nd.get(("homepage"),None),
                         repo=nd.get(("repository"),None),
                         bugs=nd.get(("bugs"),None),
@@ -105,9 +105,55 @@ class OpenVSX:
 
     def namespace(self, publisher: str):  #  -> models.namespace
         content, code = api.namespace(publisher, self.client)
+        nd = NestedDict(json.loads(content))
 
-    def reviews(self, uid: types.uid):  # -> models.reviews
+        match code:
+            case 404:
+                raise errors.PublisherNotFound(publisher,None)
+            case _:
+                ext_res = []
+                for extension in nd["extensions"]:
+                    ext_res.append(
+                        models.namespace.extension(
+                            name=extension,
+                            url=nd["extensions",extension],
+                        )
+                    )
+                res = models.namespace.namespace(
+                    name=nd['name'],
+                    extensions=ext_res,
+                    verified=nd["verified"],
+                    access=nd["access"],
+                )
+                return res
+    def reviews(self, uid: str):  # -> models.reviews
+        uid = types.uid(uid)
         content, code = api.reviews(uid.url(), self.client)
+        nd = NestedDict(json.loads(content))
+
+        match code:
+            case 404:
+                raise errors.ExtensionNotFound(uid,None)
+            case _:
+                rev_res = []
+                for review in nd['reviews']:
+                    rev_res.append(
+                        models.reviews.review(
+                            user=models.reviews.user(
+                                loginName= review.get(('user','loginName'),None),
+                                fullName =review.get(('user','fullName'),None),
+                                homepage=review.get(('user','homepage'),None),
+                                provider =review.get(('user','provider'),None),
+                            ),
+                            comment=review.get(('comment'),None),
+                            rating=review.get(('rating'),None),
+                        )
+                    )
+
+                res = models.reviews.reviews(
+                    reviews=rev_res
+                )
+                return res
 
     def search(
         self,
@@ -126,14 +172,14 @@ class OpenVSX:
         ext_res = []
         for extension in nd["extensions"]:
             ext_res.append(
-                models.extension(
+                models.search.extension(
                     name=extension.get(("name"),None),
                     displayName=extension.get(("displayName"),None),
                     desc=extension.get(("description"),None),
                     version=extension.get(("version"),None),
                     avgRating=extension.get(("averageRating"),None),
                     downloadCount=extension.get(("downloadCount"),None),
-                    files=models.search_files(
+                    files=models.search.files(
                         download=extension.get(("files", "download"),None),
                         manifest=extension.get(("files", "manifest"),None),
                         readme=extension.get(("files", "readme"),None),
@@ -143,7 +189,7 @@ class OpenVSX:
                 )
             )
 
-        res = models.search(
+        res = models.search.search(
             totalSize=nd.get(("totalSize"),None),
             extensions=ext_res
         )

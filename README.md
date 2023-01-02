@@ -6,11 +6,8 @@ unofficial api wrapper for open-vsx & vs-marketplace
 
 >  [`@open-vsx`](https://open-vsx.org)
 
-- [x] basic json httpx api request
-- [x] custom types for input of arguments
-- [ ] custom json mapping models - (remaining:,`reviews`,`publisher`)
-- [ ] map json using models , write unit tests , add docstrings (remaining:,,`reviews`,`publisher`)
-
+- [x] `info`,`namespace`,`reviews`,`search` APIs are now stable for `OpenVSX`
+- [ ] documentation for OpenVSX [0%]
 
 > [`@vs-marketplace`](https://marketplace.visualstudio.com)
 

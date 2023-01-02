@@ -1,2 +1,1 @@
-from .info import *
-from .search import *
+from . import info, namespace, reviews, search
