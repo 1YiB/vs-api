@@ -8,7 +8,7 @@ from . import errors  # 3/4
 from . import models  # 1/4
 from . import types  # done
 
-# [done] OpenVSX.info
+# [done] OpenVSX.info , OpenVSX.namespace , OpenVSX.reviews , OpenVSX.search -> [4/4]
 
 __all__ = ["OpenVSX"]
 
@@ -116,14 +116,14 @@ class OpenVSX:
                     ext_res.append(
                         models.namespace.extension(
                             name=extension,
-                            url=nd["extensions",extension],
+                            url=nd.get(("extensions",extension),None),
                         )
                     )
                 res = models.namespace.namespace(
-                    name=nd['name'],
+                    name=nd(('name'),None),
                     extensions=ext_res,
-                    verified=nd["verified"],
-                    access=nd["access"],
+                    verified=nd(("verified"),None),
+                    access=nd(("access"),None),
                 )
                 return res
     def reviews(self, uid: str):  # -> models.reviews
