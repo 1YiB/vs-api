@@ -1,6 +1,6 @@
 unofficial api wrapper for open-vsx & vs-marketplace
 
-- info api stable on openvsx
+- OpenVSX 100% complete & stable
 
 ### TODO
 
