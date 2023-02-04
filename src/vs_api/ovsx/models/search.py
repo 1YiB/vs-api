@@ -1,34 +1,32 @@
-# type:ignore
-from jsonobject import (
-    JsonObject,
-    IntegerProperty,
-    ListProperty,
-    StringProperty,
-    ObjectProperty,
-    DecimalProperty,
-)
+# needs to be rewritten
 
 
-class files(JsonObject):
-
-    download = StringProperty()
-    manifest = StringProperty()
-    readme = StringProperty()
-    changelog = StringProperty()
-    icon = StringProperty()
+from dataclasses import dataclass
 
 
-class extension(JsonObject):
+@dataclass()
+class search_base:
 
-    name = StringProperty()
-    displayName = StringProperty()
-    desc = StringProperty()
-    version = StringProperty()
-    avgRating = DecimalProperty()
-    downloadCount = IntegerProperty
-    files = ObjectProperty(files)
+    totalSize:int
+    extensions:list
 
 
-class search(JsonObject):
-    totalSize = IntegerProperty()
-    extensions = ListProperty(ObjectProperty(extension))
+class search:
+    def __new__(cls,data):
+
+        exts = []
+        for ext in data.get("extensions"):
+            exts.append({
+                "name":ext.get("name"),
+                "displayName":ext.get("displayName"),
+                "namespace":ext.get("namespace"),
+                "description":ext.get("description"),
+                "version":ext.get("version"),
+                "avgRating":ext.get("averageRating"),
+                "downloads":ext.get("downloadCount")
+            })
+
+        return search_base(
+            totalSize=data.get("totalSize"),
+            extensions=exts
+        )

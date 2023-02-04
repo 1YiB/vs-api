@@ -1,4 +1,2 @@
 httpx
-simplejson
-ndicts
-jsonobject
+orjson

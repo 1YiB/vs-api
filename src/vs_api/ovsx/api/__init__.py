@@ -1,6 +1,6 @@
 from .info import info
-from .namespace import namespace
+from .publisher import publisher
 from .reviews import reviews
 from .search import search
 
-__all__ = ["info","namespace","reviews","search"]
+__all__ = ["info","publisher","reviews","search"]

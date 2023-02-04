@@ -1,23 +1,30 @@
-# type: ignore
-from jsonobject import (
-    JsonObject,
-    StringProperty,
-    DecimalProperty,
-    ObjectProperty,
-    ListProperty,
-)
+from dataclasses import dataclass
 
-class user(JsonObject):
-    loginName = StringProperty()
-    fullName = StringProperty()
-    avatarUrl = StringProperty()
-    homepage = StringProperty()
-    provider = StringProperty()
+@dataclass
+class base_reviews:
 
-class review(JsonObject):
-    user=ObjectProperty(user)
-    comment= StringProperty()
-    rating = DecimalProperty()
+    count:int
+    ratings:list
 
-class reviews(JsonObject):
-    reviews = ListProperty(ObjectProperty(review))
+class reviews:
+    def __new__(cls,data):
+
+        ratings = []
+
+        for review in data.get("reviews"):
+            user = review.get("user")
+            ratings.append({
+                "user":{
+                    "loginName":user.get("loginName"),
+                    "fullName":user.get("fullName"),
+                    "avatar":user.get("avatarUrl"),
+                    "homepage":user.get("homepage")
+                },
+                "comment":review.get("comment"),
+                "rating":review.get("rating")
+            })
+
+        return base_reviews(
+            count=len(data.get("reviews",[])),
+            ratings=ratings
+        )

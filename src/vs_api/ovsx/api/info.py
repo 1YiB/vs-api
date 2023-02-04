@@ -1,17 +1,10 @@
+from typing import Any
 import httpx
+import orjson as json
 
-def info(uid: str, client: httpx.Client) -> tuple[bytes, int]:
-    """
-    returns info on extension
 
-    Args:
-        id (str): unique identifier of extension
-        client (httpx.Client): httpx http client
-
-    Returns:
-        tuple[bytes, int]: tuple('api response','api status code')
-    """
+def info(uid: str, client: httpx.Client) -> tuple[Any, int]:
 
     endpoint = uid
     r = client.get(url=endpoint)
-    return (r.content, r.status_code)
+    return (json.loads(r.content), r.status_code)

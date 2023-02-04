@@ -1,126 +1,82 @@
-# type: ignore
-from jsonobject import (
-    JsonObject,
-    StringProperty,
-    DecimalProperty,
-    IntegerProperty,
-    BooleanProperty,
-    ObjectProperty,
-    ListProperty,
-)
+from dataclasses import dataclass
 
 
 
+@dataclass
+class info_base:
 
-class name(JsonObject):
+    name:str
+    displayName:str
 
+    namespace:str
+    description:str
 
-    trueName = StringProperty()
-    displayName = StringProperty()
+    version:str
+    platform: str
+    license:str
 
+    publisher = {
+        "loginName":str,
+        "fullName":str,
+        "avatar":str,
+        "homepage":str
+    }
 
-### publisher sub classes ###
+    verified:bool
+    preview:bool
+    preRelease:bool
+    unrelatedPublisher:bool
+    namespaceAccess:str
 
-class org(JsonObject):
+    dependencies:list
+    bundledExtensions:list
 
-    name = StringProperty()
-    access = StringProperty()
-    verified = BooleanProperty()
-    unrelated = BooleanProperty
+    classification={
+    "tags":list,
+    "kind":list,
+    "categories":list
+    },
 
+    engine = {},
 
-class publishedBy(JsonObject):
+    urls = {
+        "homepage":str,
+        "repository":str,
+        "bugs":str
+    }
+    rating = {
+        "count":int,
+        "avg":float
+    }
+    downloads = {
+        "urls":dict[str,str],
+        "count":int
+    },
+    files = {
+        "icon":str,
+        "download":str,
+        "manifest":str,
+        "readme":str,
+        "changelog":str,
+        "license":str
+    }
 
-    loginName = StringProperty()
-    fullName = StringProperty()
-    avatar = StringProperty()
-    homepage = StringProperty()
-    provider = StringProperty()
+class info:
+    def __new__(cls,data):
 
-
-### publisher main class ###
-
-
-class publisher(JsonObject):
-
-    org = ObjectProperty(org)
-    publishedBy = ObjectProperty(publishedBy)
-
-
-### metadata sub classes ###
-
-
-class general(JsonObject):
-
-    desc = StringProperty()
-    version = StringProperty()
-    platform = StringProperty()
-    License = StringProperty()
-    preview = BooleanProperty()
-    preRelease= BooleanProperty()
-
-class classifcation(JsonObject):
-
-    categories = ListProperty(str)
-    kind = ListProperty(str)
-    tags = ListProperty(str)
-
-
-class requirments(JsonObject):
-
-    engine = StringProperty()
-    dep = ListProperty(str)
-    bundled = ListProperty(str)
-
-
-class rating(JsonObject):
-
-    count = IntegerProperty()
-    avg = DecimalProperty()
-
-
-class downloads(JsonObject):
-
-    count = IntegerProperty()
-
-
-### metadata main class ###
-
-
-class metadata(JsonObject):
-
-    general = ObjectProperty(general)
-    classifcation = ObjectProperty(classifcation)
-    requirments = ObjectProperty(requirments)
-    rating = ObjectProperty(rating)
-    downloads = ObjectProperty(downloads)
-
-## files main class ###
-
-class files(JsonObject):
-
-    download = StringProperty()
-    manifest = StringProperty()
-    readme = StringProperty()
-    changelog = StringProperty()
-    icon = StringProperty()
-
-### urls main class ###
-
-class urls(JsonObject):
-
-    homepage = StringProperty()
-    repo = StringProperty()
-    bugs = StringProperty()
-
-
-### info main class ###
-
-class info(JsonObject):
-
-
-    name = ObjectProperty(name)
-    publisher = ObjectProperty(publisher)
-    metadata = ObjectProperty(metadata)
-    files = ObjectProperty(files)
-    urls= ObjectProperty(urls)
+        return info_base(
+            name=data.get("name"),
+            displayName=data.get("displayName"),
+            namespace=data.get("namespace"),
+            description=data.get("description"),
+            version=data.get("version"),
+            platform=data.get("targetPlatform"),
+            license=data.get("license"),
+            verified=data.get("verified"),
+            preview=data.get("preview"),
+            preRelease=data.get("preRelease"),
+            unrelatedPublisher=data.get("unrelatedPublisher"),
+            namespaceAccess=data.get("namespaceAccess"),
+            dependencies=data.get("dependencies"),
+            bundledExtensions=data.get("bundledExtensions")
+        )

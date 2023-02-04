@@ -1,9 +1,15 @@
 from typing import Literal
 
+#
+# publisher function
+#
 class uid(str):
     def url(self):
         return f"{self.replace('.','/')}"
 
+#
+# search function
+#
 category = Literal[
     "",
     "Programming Languages",

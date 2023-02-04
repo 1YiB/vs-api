@@ -6,4 +6,3 @@ class ExtensionNotFound(Exception):
         self.uid = uid
         self.message = f"Extension not found: {self.uid}" or message
         super().__init__(self.message)
-
