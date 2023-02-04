@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 
 @dataclass
-class base_publisher:
+class publisher_base:
     name:str
     extensions:dict[str,str]
     verified:bool
@@ -10,9 +10,9 @@ class base_publisher:
 
 
 class publisher:
-    def __new__(cls,data):
+    def __new__(cls,data) -> publisher_base:
 
-        return base_publisher(
+        return publisher_base(
             name=data.get("name"),
             access=data.get("access"),
             extensions=data.get("extensions"),

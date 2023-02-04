@@ -62,7 +62,7 @@ class info_base:
     }
 
 class info:
-    def __new__(cls,data):
+    def __new__(cls,data) -> info_base:
 
         return info_base(
             name=data.get("name"),

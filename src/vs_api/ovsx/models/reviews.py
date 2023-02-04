@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
 @dataclass
-class base_reviews:
+class reviews_base:
 
     count:int
     ratings:list
 
 class reviews:
-    def __new__(cls,data):
+    def __new__(cls,data) -> reviews_base:
 
         ratings = []
 
@@ -24,7 +24,7 @@ class reviews:
                 "rating":review.get("rating")
             })
 
-        return base_reviews(
+        return reviews_base(
             count=len(data.get("reviews",[])),
             ratings=ratings
         )

@@ -1,7 +1,6 @@
-
 import httpx
 
-from . import api, errors, types,models
+from . import api, errors, models, types
 
 __all__ = ["OpenVSX"]
 
@@ -23,20 +22,32 @@ class OpenVSX:
 
 
     def info(self, uid: str):
+
         uid = types.uid(uid)
         (data, code) = api.info(uid=uid.url(), client=self.client)
+
+        if code == 404: raise errors.ExtensionNotFound(uid,None)
+
         res = models.info(data=data)
         return res
 
 
     def publisher(self, namespace: str):
+
         (data, code) = api.publisher(namespace, self.client)
+
+        if code == 404: raise errors.PublisherNotFound(namespace,None)
+
         res = models.publisher(data=data)
         return res
 
     def reviews(self, uid: str):
+
         uid = types.uid(uid)
         (data, code) = api.reviews(uid.url(), self.client)
+
+        if code == 404: raise errors.ExtensionNotFound(uid,None)
+
         res = models.reviews(data=data)
         return res
 

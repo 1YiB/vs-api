@@ -12,7 +12,7 @@ class search_base:
 
 
 class search:
-    def __new__(cls,data):
+    def __new__(cls,data) -> search_base:
 
         exts = []
         for ext in data.get("extensions"):
